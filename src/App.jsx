@@ -1,5 +1,4 @@
-import Router from "react-router-dom";
-
+import Router from "./shared/Router";
 function App() {
   return <Router />;
 }

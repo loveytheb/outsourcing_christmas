@@ -1,10 +1,10 @@
-import Main from "pages/Main";
-import Detail from "pages/Detail";
-import MyPage from "pages/MyPage";
+import React from "react";
+import Main from "../pages/Main";
+import MyPage from "../pages/MyPage";
+import Detail from "../pages/Detail";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
-export default function Router() {
+function Router() {
   return (
     <BrowserRouter>
       <Routes>
@@ -16,3 +16,5 @@ export default function Router() {
     </BrowserRouter>
   );
 }
+
+export default Router;

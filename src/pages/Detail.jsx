@@ -1,5 +1,7 @@
 import React from "react";
 
-export default function detail() {
+function detail() {
   return <div>detail</div>;
 }
+
+export default detail;
