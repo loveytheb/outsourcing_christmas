@@ -10,8 +10,16 @@ function Detail() {
   const { id } = useParams();
   //디테일 페이지 장소에 해당하는 데이터 가져오기
   const placeData = dummy.filter((e) => e.placeId == id);
-  const { placeName, placeAddr, opDate, opHour, tips, imgUrl, posts } =
-    placeData[0];
+  const {
+    FounderId,
+    placeName,
+    placeAddr,
+    opDate,
+    opHour,
+    tips,
+    imgUrl,
+    posts,
+  } = placeData[0];
   const navigate = useNavigate();
   console.log(posts === undefined);
 
@@ -22,7 +30,7 @@ function Detail() {
           <MainImg src={imgUrl} alt="이미지 자리" />
           <HomeBtn onClick={() => navigate("/")}>←</HomeBtn>
           <MainInfo>
-            <Visitor>user123님이 처음 발견한 공간이에요!</Visitor>
+            <Visitor>{FounderId}님이 처음 발견한 공간이에요!</Visitor>
             <PlaceName>{placeName}</PlaceName>
             <PlaceInfo>📌 {placeAddr}</PlaceInfo>
             <PlaceInfo>📅 {opDate}</PlaceInfo>
@@ -41,7 +49,7 @@ function Detail() {
           ) : (
             <></>
           )}
-          <TreeImg
+          <UpBtn
             src={treeImg}
             alt="to up btn"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -145,7 +153,7 @@ const AddPostBtn = styled.button`
   }
 `;
 
-const TreeImg = styled.img`
+const UpBtn = styled.img`
   width: 100px;
   height: 100px;
 

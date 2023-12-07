@@ -1,5 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 import Dovemayo_gothic from "./assets/fonts/Dovemayo_gothic.ttf";
+import Cookie_Regular from "./assets/fonts/Cookie-Regular.ttf";
 
 const GlobalStyle = createGlobalStyle`
     html, body, div, span, applet, object, iframe,
@@ -34,7 +35,7 @@ body {
 	margin: 0;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	background: linear-gradient(to bottom, #971717, white);
+	background: linear-gradient(to bottom, #6e1010, #971717, white);
 }
 ol, ul {
 	list-style: none;
@@ -66,6 +67,13 @@ button {
     font-family: 'Dovemayo_gothic';
     src: local('Dovemayo_gothic'),
 	url(${Dovemayo_gothic}) format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Cookie-Regular';
+    src: local('Cookie-Regular'),
+	url(${Cookie_Regular}) format('woff2');
     font-weight: normal;
     font-style: normal;
 }

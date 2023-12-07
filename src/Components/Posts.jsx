@@ -1,5 +1,5 @@
 import React from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 function Posts(props) {
   const { post } = props;
@@ -8,10 +8,10 @@ function Posts(props) {
   return (
     <>
       <Post>
-        <Visitor>user2 님의 방문 후기</Visitor>
-        <Content $img={img}>
+        <Visitor>{post.userId} 님의 방문 후기</Visitor>
+        <Content>
           <Tips>" {post.tips} "</Tips>
-          <Img $img={img} src={post.imgUrl} alt="" />
+          <Img src={post.imgUrl} alt="" />
         </Content>
       </Post>
     </>
@@ -44,21 +44,9 @@ const Content = styled.div`
 `;
 
 const Img = styled.img`
-  ${(props) => {
-    const img = props.$img;
-    if (img.height > img.width) {
-      return css`
-        height: 300px;
-        object-fit: cover;
-        border-radius: 15px;
-      `;
-    }
-    return css`
-      height: 300px;
-      object-fit: cover;
-      border-radius: 15px;
-    `;
-  }}
+  height: 300px;
+  object-fit: cover;
+  border-radius: 15px;
 `;
 
 const Tips = styled.p`
