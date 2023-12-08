@@ -1,52 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+import { collection, doc, getDocs, query } from "firebase/firestore";
+import { db } from "../firebase";
+
 function MainPosts() {
   const navigate = useNavigate();
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const postQuery = query(collection(db, "places"));
+      const postSnapshot = await getDocs(postQuery);
+      const postList = postSnapshot.docs.map((doc, idx) => ({
+        ...doc.data(),
+        postId: doc.id,
+      }));
+      setPosts(postList);
+    };
+    fetchPosts();
+  }, []);
 
+  console.log(posts);
   return (
     <>
-      <MainInfo>
-        <Div>
-          <div>
-            <PlaceName>신세계 백화점 본점</PlaceName>
-            <PlaceInfo>서울 중구 소공로 63</PlaceInfo>
+      {posts.map((post, idx) => {
+        return (
+          <>
+            <MainInfo key={idx}>
+              <Div>
+                <div>
+                  <PlaceName>{post.placeName}</PlaceName>
+                  <PlaceInfo>{post.placeAddr}</PlaceInfo>
 
-            <PlaceTips>
-              "백화점 건너편도로에서 보는게 가장 좋습니다. 회현지하쇼핑센터
-              1번출구 쪽을 추천해요."
-            </PlaceTips>
-            <ToDetailBtn onClick={() => navigate("/detail/1")}>
-              더 자세한 방문후기 보러가기
-            </ToDetailBtn>
-          </div>
-          <Img
-            src="https://www.shinsegaegroupnewsroom.com/wp-content/uploads/2022/12/Sub-16.png"
-            alt=""
-          />
-        </Div>
-      </MainInfo>
-      <MainInfo>
-        <Div>
-          <div>
-            <PlaceName>더 현대 서울 H 빌리지</PlaceName>
-            <PlaceInfo>서울 영등포구 여의대로 108</PlaceInfo>
-
-            <PlaceTips>
-              "어렵게 예약해서 다녀왔어요. 포토스팟에서 사진을 찍으려면 줄을
-              서야해서 아쉬웠지만 인생샷 건져서 너무 좋았습니다."
-            </PlaceTips>
-            <ToDetailBtn onClick={() => navigate("/detail/2")}>
-              더 자세한 방문후기 보러가기
-            </ToDetailBtn>
-          </div>
-          <Img
-            src="https://cdn.newsquest.co.kr/news/photo/202311/213961_107027_326.jpg"
-            alt=""
-          />
-        </Div>
-      </MainInfo>
+                  <PlaceTips>{post.tips}</PlaceTips>
+                  <ToDetailBtn
+                    onClick={() => navigate(`/detail/${post.postId}`)}
+                  >
+                    더 자세한 방문후기 보러가기
+                  </ToDetailBtn>
+                </div>
+                <Img src={post.imgUrl} alt="" />
+              </Div>
+            </MainInfo>
+          </>
+        );
+      })}
     </>
   );
 }
