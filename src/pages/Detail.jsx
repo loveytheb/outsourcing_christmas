@@ -22,6 +22,7 @@ function Detail() {
   }, [id]);
 
   console.log(mainPost);
+
   if (!mainPost) return <div>Loading...</div>;
 
   return (
