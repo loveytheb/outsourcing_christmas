@@ -1,16 +1,25 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import treeImg from "../assets/treeIcon.png";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import AuthBtn from "../pages/Home/Header/AuthBtn";
+import Modal from "../pages/Home/Header/Modal";
 
 function Header() {
+  const navigate = useNavigate();
+  const modalOpen = useSelector((state) => state.modalState.modalOpen);
+
   const [isLogin, setIsLogin] = useState(true); //redux로 상태관리 수정 필
   return (
     <>
       <MainHeader>
-        <H1>Santa's HotSpot</H1>
+        <H1 onClick={() => {navigate('/')}}>Santa's HotSpot</H1>
         <TreeImg src={treeImg} />
+        <AuthBtn />
         {isLogin ? <LoginBtn>Logout</LoginBtn> : <LoginBtn>Login</LoginBtn>}
       </MainHeader>
+      { modalOpen && <Modal /> }
     </>
   );
 }
