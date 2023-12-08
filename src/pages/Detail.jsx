@@ -1,48 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Posts from "../Components/Posts";
 import treeImg from "../assets/treeIcon.png";
 
-import dummy from "../dummy.json";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 function Detail() {
   const { id } = useParams();
-  //디테일 페이지 장소에 해당하는 데이터 가져오기
-  const placeData = dummy.filter((e) => e.placeId == id);
-  const {
-    FounderId,
-    placeName,
-    placeAddr,
-    opDate,
-    opHour,
-    tips,
-    imgUrl,
-    posts,
-  } = placeData[0];
   const navigate = useNavigate();
-  console.log(posts === undefined);
+  const [mainPost, setMainPost] = useState(null);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      const docRef = doc(db, "places", id);
+      const docsnap = await getDoc(docRef);
+      setMainPost(docsnap.data());
+    };
+    fetchPost();
+  }, [id]);
+
+  console.log(mainPost);
+  if (!mainPost) return <div>Loading...</div>;
 
   return (
     <>
       <Div>
         <Container>
-          <MainImg src={imgUrl} alt="이미지 자리" />
+          <MainImg src={mainPost.imgUrl} alt="이미지 자리" />
           <HomeBtn onClick={() => navigate("/")}>←</HomeBtn>
           <MainInfo>
-            <Visitor>{FounderId}님이 처음 발견한 공간이에요!</Visitor>
-            <PlaceName>{placeName}</PlaceName>
-            <PlaceInfo>📌 {placeAddr}</PlaceInfo>
-            <PlaceInfo>📅 {opDate}</PlaceInfo>
-            <PlaceInfo>🕒 {opHour}</PlaceInfo>
-            <PlaceTips>" {tips} "</PlaceTips>
+            <Visitor>{mainPost.founderId}님이 처음 발견한 공간이에요!</Visitor>
+            <PlaceName>{mainPost.placeName}</PlaceName>
+            <PlaceInfo>📌 {mainPost.placeAddr}</PlaceInfo>
+            <PlaceInfo>📅 {mainPost.opDate}</PlaceInfo>
+            <PlaceInfo>🕒 {mainPost.opHour}</PlaceInfo>
+            <PlaceTips>" {mainPost.tips} "</PlaceTips>
             <AddPostBtn>user999님의 방문 후기를 추가해보세요!</AddPostBtn>
           </MainInfo>
-          {posts !== undefined ? (
+          {mainPost.posts.length !== 0 ? (
             <>
               <div>
-                {posts.map((post) => (
-                  <Posts post={post} />
+                {mainPost.posts.map((post, idx) => (
+                  <Posts key={idx} post={post} />
                 ))}
               </div>
             </>
