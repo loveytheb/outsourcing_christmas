@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../Components/Header";
 import MainPosts from "../Components/MainPosts";
-
 import treeImg from "../assets/treeIcon.png";
 
 function Main() {
@@ -33,6 +32,7 @@ function Main() {
       </ReadingBox>
     </>
   );
+
 }
 
 export default Main;
