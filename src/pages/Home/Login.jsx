@@ -1,52 +1,87 @@
-import React, { useState } from 'react'
-import styled from 'styled-components';
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from '../../firebase';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import {
+  onAuthStateChanged,
+  getAuth,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { IoCloseCircleOutline } from "react-icons/io5";
-import { useDispatch } from 'react-redux';
-import { setModalType } from '../../redux/modules/modalState';
-import { setModalOpen } from '../../redux/modules/modalState';
+import { useDispatch } from "react-redux";
+import { setModalType } from "../../redux/modules/modalState";
+import { setModalOpen } from "../../redux/modules/modalState";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase";
+import { __isLogin } from "../../redux/modules/authSlice";
 
-export default function Login({ modalBackground, modalBackgroundOnclickHandler }) {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+export default function Login({
+  modalBackground,
+  modalBackgroundOnclickHandler,
+}) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const auth = getAuth();
 
-    const dispatch = useDispatch();
-    
-    const signupPageClickHandler = () => {
-        dispatch(setModalType("signup"));
+  const getName = async () => {
+    const docRef = doc(db, "users", auth.currentUser.uid);
+    const docSnap = await getDoc(docRef);
+    const name = docSnap.data().name;
+    dispatch(__isLogin({ isLogined: true, userId: name }));
+  };
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      // const docRef = doc(db, "users", user.uid);
+      // const docSnap = await getDoc(docRef);
+      // const name = docSnap.data().name;
+      // dispatch(__isLogin({ isLogined: true, userId: name }));
+      console.log("user", user);
+    });
+  }, [auth]);
+
+  const dispatch = useDispatch();
+
+  const signupPageClickHandler = () => {
+    dispatch(setModalType("signup"));
+  };
+
+  const onChange = (event) => {
+    const {
+      target: { name, value },
+    } = event;
+    if (name === "email") {
+      setEmail(value);
     }
+    if (name === "password") {
+      setPassword(value);
+    }
+  };
 
-    const onChange = (event) => {
-      const {
-        target: { name, value }
-      } = event;
-      if (name === "email") {
-        setEmail(value);
-      }
-      if (name === "password") {
-        setPassword(value);
-      }
-    };
-  
-    const logIn = async (event) => {
-      event.preventDefault();
-      try {
-        const userCredential = await signInWithEmailAndPassword( auth, email, password );
-        console.log(userCredential);
-        alert("로그인에 성공하였습니다.");
-        // 로그인 성공하면 모달창 닫히게
-        dispatch(setModalOpen(false));
-      } catch (error) {
-        console.log(error);
-        alert("이메일 또는 비밀번호가 일치하지 않습니다.");
-      }
-    };
+  const logIn = async (event) => {
+    event.preventDefault();
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log(userCredential);
+      getName();
+      alert("로그인에 성공하였습니다.");
+      // 로그인 성공하면 모달창 닫히게
+      dispatch(setModalOpen(false));
+    } catch (error) {
+      console.log(error);
+      alert("이메일 또는 비밀번호가 일치하지 않습니다.");
+    }
+  };
 
   return (
     <StModalContent onSubmit={logIn}>
       <StModalCloseBtn>
-        <IoCloseCircleOutline ref={modalBackground} onClick={modalBackgroundOnclickHandler} />
+        <IoCloseCircleOutline
+          ref={modalBackground}
+          onClick={modalBackgroundOnclickHandler}
+        />
       </StModalCloseBtn>
       <StLoginModalTitle>로그인</StLoginModalTitle>
       <StModalLoginInput
@@ -67,9 +102,11 @@ export default function Login({ modalBackground, modalBackgroundOnclickHandler }
         placeholder="비밀번호를 입력해주세요"
       />
       <StModalLonInBtn disabled={!(email && password)}>로그인</StModalLonInBtn>
-      <StModalSignupBtn onClick={signupPageClickHandler}>회원가입</StModalSignupBtn>
+      <StModalSignupBtn onClick={signupPageClickHandler}>
+        회원가입
+      </StModalSignupBtn>
     </StModalContent>
-  )
+  );
 }
 
 const StModalContent = styled.form`

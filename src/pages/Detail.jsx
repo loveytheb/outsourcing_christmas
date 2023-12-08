@@ -6,11 +6,13 @@ import treeImg from "../assets/treeIcon.png";
 
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { useSelector } from "react-redux";
 
 function Detail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [mainPost, setMainPost] = useState(null);
+  const userName = useSelector((state) => state.authSlice.userId);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -38,7 +40,11 @@ function Detail() {
             <PlaceInfo>📅 {mainPost.opDate}</PlaceInfo>
             <PlaceInfo>🕒 {mainPost.opHour}</PlaceInfo>
             <PlaceTips>" {mainPost.tips} "</PlaceTips>
-            <AddPostBtn>user999님의 방문 후기를 추가해보세요!</AddPostBtn>
+            <AddPostBtn>
+              {userName
+                ? `${userName}님의 방문 후기를 추가해보세요!`
+                : "로그인 후 방문 후기를 추가해보세요!"}
+            </AddPostBtn>
           </MainInfo>
           {mainPost.posts.length !== 0 ? (
             <>

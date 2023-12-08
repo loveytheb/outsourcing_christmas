@@ -1,17 +1,25 @@
-import React, { useCallback, useState } from 'react'
-import styled from 'styled-components';
+import React, { useCallback, useState } from "react";
+import styled from "styled-components";
 import { IoCloseCircleOutline } from "react-icons/io5";
-import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
-import { auth } from '../../firebase';
-import { useDispatch } from 'react-redux';
-import { setModalType } from '../../redux/modules/modalState';
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+} from "firebase/auth";
+import { auth } from "../../firebase";
+import { useDispatch } from "react-redux";
+import { setModalType } from "../../redux/modules/modalState";
+import { doc, setDoc } from "@firebase/firestore";
+import { db } from "../../firebase";
 
-export default function Signup({ modalBackground, modalBackgroundOnclickHandler }) {
+export default function Signup({
+  modalBackground,
+  modalBackgroundOnclickHandler,
+}) {
   const dispatch = useDispatch();
 
   const loginPageCLickHandler = () => {
     dispatch(setModalType("login"));
-  }
+  };
   // 닉네임, 이메일, 비밀번호, 비밀번호 확인
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -34,7 +42,16 @@ export default function Signup({ modalBackground, modalBackgroundOnclickHandler 
   const signUp = async (event) => {
     event.preventDefault();
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      //회원가입 유저 정보
+      const user = userCredential.user;
+      await setDoc(doc(db, "users", user.uid), {
+        name: name,
+      });
       console.log(userCredential);
       alert("회원가입이 완료되었습니다.");
       // 회원가입 성공하면 모달창 닫히게
@@ -60,7 +77,11 @@ export default function Signup({ modalBackground, modalBackgroundOnclickHandler 
   // 이메일
   const onChangeEmail = useCallback((event) => {
     setEmail(event.target.value);
-    if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/.test(event.target.value)) {
+    if (
+      !/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/.test(
+        event.target.value
+      )
+    ) {
       setEmailMessage("이메일 형식에 맞춰서 입력해주세요.");
       setIsEmail(false);
     } else {
@@ -72,8 +93,14 @@ export default function Signup({ modalBackground, modalBackgroundOnclickHandler 
   // 비밀번호
   const onChangePassword = useCallback((event) => {
     setPassword(event.target.value);
-    if (!/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/.test(event.target.value)) {
-      setPasswordMessage("숫자+영문자+특수문자(!@#$%^*+=-) 조합으로 8자리 이상 입력해주세요.");
+    if (
+      !/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/.test(
+        event.target.value
+      )
+    ) {
+      setPasswordMessage(
+        "숫자+영문자+특수문자(!@#$%^*+=-) 조합으로 8자리 이상 입력해주세요."
+      );
       setIsPassword(false);
     } else {
       setPasswordMessage("안전한 비밀번호입니다.");
@@ -98,55 +125,80 @@ export default function Signup({ modalBackground, modalBackgroundOnclickHandler 
   return (
     <>
       <StModalContent onSubmit={signUp}>
-      <StModalCloseBtn>
-        <IoCloseCircleOutline ref={modalBackground} onClick={modalBackgroundOnclickHandler} />
-      </StModalCloseBtn>
-      <StModalSignupTitle>회원가입</StModalSignupTitle>
-      <StModalLoginInput type="text" value={name} name="name" onChange={onChangeName} placeholder="닉네임" />
-      {name.length > 0 && (
-        <StWarningText className={`message ${isName ? "success" : "error"}`}>{nameMessage}</StWarningText>
-      )}
-      <StModalLoginInput
-        type="email"
-        value={email}
-        name="email"
-        onChange={onChangeEmail}
-        required
-        placeholder="이메일"
-      />
-      {email.length > 0 && (
-        <StWarningText className={`message ${isEmail ? "success" : "error"}`}>{emailMessage}</StWarningText>
-      )}
-      <StModalLoginInput
-        type="password"
-        value={password}
-        name="password"
-        onChange={onChangePassword}
-        required
-        autoComplete="off"
-        placeholder="비밀번호"
-      />
-      {password.length > 0 && (
-        <StWarningText className={`message ${isPassword ? "success" : "error"}`}>{passwordMessage}</StWarningText>
-      )}
-      <StModalLoginInput
-        autoComplete="off"
-        type="password"
-        value={confirmPassword}
-        name="confirmPassword"
-        onChange={onChangeConfirmPassword}
-        placeholder="비밀번호 확인"
-      />
-      {confirmPassword.length > 0 && (
-        <StWarningText className={`message ${isConfirmPassword ? "success" : "error"}`}>
-          {confirmPasswordMessage}
-        </StWarningText>
-      )}
-      <StModalLonInBtn disabled={!(isName && isEmail && isPassword && isConfirmPassword)}>회원가입</StModalLonInBtn>
-      <StModalSignupBtn onClick={loginPageCLickHandler}>로그인</StModalSignupBtn>
-    </StModalContent>
+        <StModalCloseBtn>
+          <IoCloseCircleOutline
+            ref={modalBackground}
+            onClick={modalBackgroundOnclickHandler}
+          />
+        </StModalCloseBtn>
+        <StModalSignupTitle>회원가입</StModalSignupTitle>
+        <StModalLoginInput
+          type="text"
+          value={name}
+          name="name"
+          onChange={onChangeName}
+          placeholder="닉네임"
+        />
+        {name.length > 0 && (
+          <StWarningText className={`message ${isName ? "success" : "error"}`}>
+            {nameMessage}
+          </StWarningText>
+        )}
+        <StModalLoginInput
+          type="email"
+          value={email}
+          name="email"
+          onChange={onChangeEmail}
+          required
+          placeholder="이메일"
+        />
+        {email.length > 0 && (
+          <StWarningText className={`message ${isEmail ? "success" : "error"}`}>
+            {emailMessage}
+          </StWarningText>
+        )}
+        <StModalLoginInput
+          type="password"
+          value={password}
+          name="password"
+          onChange={onChangePassword}
+          required
+          autoComplete="off"
+          placeholder="비밀번호"
+        />
+        {password.length > 0 && (
+          <StWarningText
+            className={`message ${isPassword ? "success" : "error"}`}
+          >
+            {passwordMessage}
+          </StWarningText>
+        )}
+        <StModalLoginInput
+          autoComplete="off"
+          type="password"
+          value={confirmPassword}
+          name="confirmPassword"
+          onChange={onChangeConfirmPassword}
+          placeholder="비밀번호 확인"
+        />
+        {confirmPassword.length > 0 && (
+          <StWarningText
+            className={`message ${isConfirmPassword ? "success" : "error"}`}
+          >
+            {confirmPasswordMessage}
+          </StWarningText>
+        )}
+        <StModalLonInBtn
+          disabled={!(isName && isEmail && isPassword && isConfirmPassword)}
+        >
+          회원가입
+        </StModalLonInBtn>
+        <StModalSignupBtn onClick={loginPageCLickHandler}>
+          로그인
+        </StModalSignupBtn>
+      </StModalContent>
     </>
-  )
+  );
 }
 
 const StModalContent = styled.form`

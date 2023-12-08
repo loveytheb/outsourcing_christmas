@@ -1,20 +1,29 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
+export const __isLogin = createAsyncThunk(
+  //action value
+  "isLogin",
+  //callback
+  (payload, thunkAPI) => {
+    thunkAPI.dispatch(isLogin(payload));
+  }
+);
 
 const initialState = {
-    users: [],
-    currentUser: null,
-}
+  isLogined: false,
+  userId: "",
+};
 
 const usersSlice = createSlice({
-    name: "users",
-    initialState,
-    reducers: {
-        setCurrentUser: (state, action) => {
-            const currentUser = state.users.find((user) => user.uid === action.payload)
-            return {...state, currentUser: currentUser ? currentUser : null};
-        }
-    }
+  name: "user",
+  initialState,
+  reducers: {
+    isLogin: (state, action) => {
+      console.log("auth: ", action.payload);
+      return action.payload;
+    },
+  },
 });
 
-export const { setUserLogin } = usersSlice.actions;
+export const { isLogin } = usersSlice.actions;
 export default usersSlice.reducer;
