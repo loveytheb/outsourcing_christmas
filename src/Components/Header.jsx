@@ -10,16 +10,22 @@ function Header() {
   const navigate = useNavigate();
   const modalOpen = useSelector((state) => state.modalState.modalOpen);
 
-  const [isLogin, setIsLogin] = useState(true); //redux로 상태관리 수정 필
+  // const [isLogin, setIsLogin] = useState(true); //redux로 상태관리 수정 필
   return (
     <>
       <MainHeader>
-        <H1 onClick={() => {navigate('/')}}>Santa's HotSpot</H1>
+        <H1
+          onClick={() => {
+            navigate("/");
+          }}
+        >
+          Santa's HotSpot
+        </H1>
         <TreeImg src={treeImg} />
         <AuthBtn />
-        {isLogin ? <LoginBtn>Logout</LoginBtn> : <LoginBtn>Login</LoginBtn>}
+        {/* {isLogined ? <LoginBtn>Logout</LoginBtn> : <LoginBtn>Login</LoginBtn>} */}
       </MainHeader>
-      { modalOpen && <Modal /> }
+      {modalOpen && <Modal />}
     </>
   );
 }
