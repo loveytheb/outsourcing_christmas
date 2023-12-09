@@ -1,0 +1,37 @@
+[
+  {
+    "FounderId": "user123",
+    "placeId": 1,
+    "placeName": "신세계 백화점 본점 파사드",
+    "placeAddr": "서울 중구 소공로 63",
+    "opDate": "23.11.9. ~ 24. 1.31.",
+    "opHour": "17:30 ~ 22:00",
+    "tips": "백화점 건너편도로에서 보는게 가장 좋습니다. 회현지하쇼핑센터 1번출구 쪽을 추천해요.",
+    "imgUrl": "https://www.shinsegaegroupnewsroom.com/wp-content/uploads/2022/12/Sub-16.png",
+    "posts": [
+      {
+        "userId": "user333",
+        "postId": 1,
+        "tips": "정말 예뻐요! 자차로 방문하신 분들 백화점 앱 설치하고 회원가입 하면 3시간 무료 주차권 2장 받으실 수 있어요!",
+        "imgUrl": "https://mblogthumb-phinf.pstatic.net/MjAyMjAxMTBfNjMg/MDAxNjQxODAyOTk2MTU0.LY4WHsrQWvyeyKeA34TcvV5E5mbwLmw9ObCjG0O-atwg.jEGvzpy-i0m6S4YeY9SXIOmXzMEMym3rLkzYhVfldpUg.JPEG.didim_yeoul/SE-48F14B80-588E-42E2-9E4E-8755781328E8.jpg?type=w800"
+      },
+      {
+        "userId": "user356",
+        "postId": 2,
+        "tips": "지난 주말에 다녀왔습니다. 사람 정말 많더라구요. 백화점 내부 신관 3층/본관 4층 연결통로에서 크리스마스 마켓도 하고 있으니 함께 방문해보시길 추천합니다.",
+        "imgUrl": "https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202311/22/337a9b62-96ca-445e-899e-5cb6e0e52bbb.jpg"
+      }
+    ]
+  },
+  {
+    "FounderId": "happy x-mas",
+    "placeId": 2,
+    "placeName": "더 현대 서울 H 빌리지",
+    "placeAddr": "서울 영등포구 여의대로 108",
+    "opDate": "23.11.1. ~ 23.12.25.",
+    "opHour": "10:30 ~ 22:00",
+    "tips": "어렵게 예약해서 다녀왔어요. 포토스팟에서 사진을 찍으려면 줄을 서야해서 아쉬웠지만 인생샷 건져서 너무 좋았습니다.",
+    "imgUrl": "https://cdn.newsquest.co.kr/news/photo/202311/213961_107027_326.jpg",
+    "posts": []
+  }
+]
