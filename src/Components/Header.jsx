@@ -5,13 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import AuthBtn from "../pages/Home/Header/AuthBtn";
 import Modal from "../pages/Home/Header/Modal";
-import AddButton from "./common/AddButton";
-import CustomModal from "./common/CustomModal";
 
 function Header() {
   const navigate = useNavigate();
   const modalOpen = useSelector((state) => state.modalState.modalOpen);
-  const isOpen = useSelector((state) => state.customModalSlice.isOpen);
 
   const [isLogin, setIsLogin] = useState(true); //redux로 상태관리 수정 필
   return (
@@ -26,11 +23,10 @@ function Header() {
         </H1>
         <TreeImg src={treeImg} />
         <AuthBtn />
-        <AddButton />
+
         {isLogin ? <LoginBtn>Logout</LoginBtn> : <LoginBtn>Login</LoginBtn>}
       </MainHeader>
       {modalOpen && <Modal />}
-      {isOpen && <CustomModal />}
     </>
   );
 }

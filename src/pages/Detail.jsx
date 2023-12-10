@@ -3,6 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Posts from "../Components/Posts";
 import treeImg from "../assets/treeIcon.png";
+import { useSelector, useDispatch } from "react-redux";
+import { showCustomModal } from "../redux/modules/customModalSlice";
+import TipModal from "../Components/common/TipModal";
 
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
@@ -10,7 +13,10 @@ import { db } from "../firebase";
 function Detail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [mainPost, setMainPost] = useState(null);
+  const isOpen = useSelector((state) => state.customModalSlice.isOpen);
+  console.log("isOpen", isOpen);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -20,6 +26,10 @@ function Detail() {
     };
     fetchPost();
   }, [id]);
+
+  const handleAddPostBtn = () => {
+    dispatch(showCustomModal(true));
+  };
 
   console.log(mainPost);
   if (!mainPost) return <div>Loading...</div>;
@@ -37,7 +47,9 @@ function Detail() {
             <PlaceInfo>📅 {mainPost.opDate}</PlaceInfo>
             <PlaceInfo>🕒 {mainPost.opHour}</PlaceInfo>
             <PlaceTips>" {mainPost.tips} "</PlaceTips>
-            <AddPostBtn>user999님의 방문 후기를 추가해보세요!</AddPostBtn>
+            <AddPostBtn onClick={handleAddPostBtn}>
+              user999님의 방문 후기를 추가해보세요!
+            </AddPostBtn>
           </MainInfo>
           {mainPost.posts.length !== 0 ? (
             <>
@@ -57,6 +69,7 @@ function Detail() {
           />
         </Container>
       </Div>
+      {isOpen && <TipModal />}
     </>
   );
 }

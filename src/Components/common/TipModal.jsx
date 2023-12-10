@@ -1,26 +1,27 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { showCustomModal } from "../../redux/modules/customModalSlice";
 import { addDoc, collection } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../../firebase";
 
-function CustomModal() {
+function TipModal() {
   const dispatch = useDispatch();
+
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [formData, setFormData] = useState({
-    opDate: "",
-    opHour: "",
-    placeAddr: "",
-    placeName: "",
+    tips: "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const closeModal = () => {
+    dispatch(showCustomModal(false));
   };
 
   const handleImageChange = (e) => {
@@ -44,21 +45,17 @@ function CustomModal() {
 
       const imageUrl = await getDownloadURL(storageRef);
       const placesCollectionRef = collection(db, "places");
-      const newPlace = {
+      const newPost = {
         imgUrl: imageUrl,
-        opDate: formData.opDate,
-        opHour: formData.opHour,
-        placeAddr: formData.placeAddr,
-        placeName: formData.placeName,
+        opDate: formData.tips,
       };
 
-      await addDoc(placesCollectionRef, newPlace);
+      await addDoc(placesCollectionRef, newPost);
       showCustomModal(false);
     } catch (error) {
       console.error("에러", error);
     }
   };
-
   const handleUpload = () => {
     console.log(handleUpload);
     uploadDataToFirebase();
@@ -84,35 +81,11 @@ function CustomModal() {
         />
         <CustomModalInput
           type="text"
-          value={formData.opDate}
+          value={formData.tips}
           onChange={handleChange}
-          name="opDate"
+          name="tips"
           required
-          placeholder="핫스팟은 언제까지 유지되나요?"
-        />
-        <CustomModalInput
-          type="text"
-          value={formData.opHour}
-          onChange={handleChange}
-          name="opHour"
-          required
-          placeholder="핫스팟은 몇시까지 구경할 수 있나요?"
-        />
-        <CustomModalInput
-          type="text"
-          value={formData.placeAddr}
-          onChange={handleChange}
-          name="placeAddr"
-          required
-          placeholder="핫스팟의 위치를 알려주세요!"
-        />
-        <CustomModalInput
-          type="text"
-          value={formData.placeName}
-          onChange={handleChange}
-          name="placeName"
-          required
-          placeholder="핫스팟의 이름을 알려주세요!"
+          placeholder="여러분의 팁을 알려주세요!"
         />
         <ButtonContainer>
           <CustomModalBtn onClick={handleUpload}>등록</CustomModalBtn>
@@ -140,8 +113,8 @@ const CustomModalContainer = styled.div`
 const CustomModalContent = styled.form`
   background-color: white;
   width: 400px;
-  height: 550px;
-  z-index: 100;
+  height: 380px;
+  z-index: 600;
 `;
 
 const ImagePreviewContainer = styled.div`
@@ -155,15 +128,6 @@ const ImagePreviewContainer = styled.div`
     height: 100%;
     object-fit: cover;
   }
-`;
-
-const CustomModalCloseBtn = styled.button`
-  font-size: 18px;
-  margin: 10px;
-  cursor: pointer;
-  outline: none;
-  background-color: transparent;
-  float: right;
 `;
 
 const CustomModalInput = styled.input`
@@ -195,4 +159,5 @@ const CustomModalBtn = styled.button`
     color: white;
   }
 `;
-export default CustomModal;
+
+export default TipModal;

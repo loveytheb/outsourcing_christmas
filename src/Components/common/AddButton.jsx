@@ -7,6 +7,7 @@ function AddButton() {
   const dispatch = useDispatch();
 
   const handleAddButtonClick = () => {
+    console.log("handleAddButtonClick");
     dispatch(showCustomModal(true));
   };
   return (
@@ -17,13 +18,11 @@ function AddButton() {
 }
 
 const StBtn = styled.button`
-  width: 110px;
+  width: 40px;
   height: 40px;
-  margin: auto 1.5rem auto 0;
-  border-radius: 20px;
+  border-radius: 50%;
   border: 1px solid black;
   background-color: white;
-
   cursor: pointer;
 `;
 
