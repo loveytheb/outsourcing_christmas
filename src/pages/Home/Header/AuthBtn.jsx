@@ -6,17 +6,20 @@ import { setModalOpen } from "../../../redux/modules/modalState";
 import { setModalType } from "../../../redux/modules/modalState";
 import { useDispatch, useSelector } from "react-redux";
 import { __isLogin } from "../../../redux/modules/authSlice";
+import { setSelectionRange } from "@testing-library/user-event/dist/utils";
 
 export default function AuthBtn() {
   // const currentUser = useSelector((state) => state.authSlice.currentUser)
   const dispatch = useDispatch();
   const isLogined = useSelector((state) => state.authSlice.isLogined);
+  console.log(auth.currentUser);
   console.log(isLogined);
 
   const logOut = async (event) => {
     event.preventDefault();
     await signOut(auth);
     dispatch(__isLogin({ isLogined: false, userId: "" }));
+    sessionStorage.clear();
     alert("로그아웃이 완료되었습니다.");
   };
 
