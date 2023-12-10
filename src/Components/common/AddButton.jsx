@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { showCustomModal } from "../../redux/modules/customModalSlice";
 import { __isLogin } from "../../redux/modules/authSlice";
+import { setModalOpen, setModalType } from "../../redux/modules/modalState";
 
 function AddButton() {
   const dispatch = useDispatch();
@@ -11,6 +12,8 @@ function AddButton() {
   const handleAddButtonClick = () => {
     if (!isLogined) {
       alert("로그인이 필요합니다. 로그인부터 해주세요.");
+      dispatch(setModalOpen(true));
+      dispatch(setModalType("login"));
       dispatch(showCustomModal(false));
     } else {
       dispatch(showCustomModal(true));

@@ -1,9 +1,9 @@
-import React, { useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import styled from 'styled-components'
-import Login from '../Login';
-import Signup from '../Signup';
-import { setModalOpen } from '../../../redux/modules/modalState';
+import React, { useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
+import Login from "../Login";
+import Signup from "../Signup";
+import { setModalOpen } from "../../../redux/modules/modalState";
 
 export default function Modal() {
   const dispatch = useDispatch();
@@ -12,23 +12,23 @@ export default function Modal() {
 
   const modalBackgroundOnclickHandler = () => {
     dispatch(setModalOpen(false));
-  }
+  };
   return (
     <StModalContainer>
-        {modalType === "login" && (
-            <Login
-              modalBackground={modalBackground}
-              modalBackgroundOnclickHandler={modalBackgroundOnclickHandler}  
-            />
-          )}
-          {modalType === "signup" && (
-            <Signup
-              modalBackground={modalBackground}
-              modalBackgroundOnclickHandler={modalBackgroundOnclickHandler}  
-            />
-          )}
+      {modalType === "login" && (
+        <Login
+          modalBackground={modalBackground}
+          modalBackgroundOnclickHandler={modalBackgroundOnclickHandler}
+        />
+      )}
+      {modalType === "signup" && (
+        <Signup
+          modalBackground={modalBackground}
+          modalBackgroundOnclickHandler={modalBackgroundOnclickHandler}
+        />
+      )}
     </StModalContainer>
-  )
+  );
 }
 
 const StModalContainer = styled.div`
@@ -39,5 +39,6 @@ const StModalContainer = styled.div`
   justify-content: center;
   align-items: center;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 500;
-`
+  z-index: 600;
+  border: 2px solid red;
+`;

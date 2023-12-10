@@ -5,6 +5,7 @@ import Posts from "../Components/Posts";
 import treeImg from "../assets/treeIcon.png";
 import TipModal from "../Components/common/TipModal";
 import { showCustomModal } from "../redux/modules/customModalSlice";
+import { setModalOpen, setModalType } from "../redux/modules/modalState";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useSelector, useDispatch } from "react-redux";
@@ -35,7 +36,10 @@ function Detail() {
   const handleAddPostBtn = () => {
     if (!isLogined) {
       alert("로그인이 필요합니다. 로그인부터 해주세요.");
+      dispatch(setModalOpen(true));
+      dispatch(setModalType("login"));
       dispatch(showCustomModal(false));
+      navigate("/");
     } else {
       dispatch(showCustomModal(true));
     }
