@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import { collection, doc, getDocs, query } from "firebase/firestore";
 import { db } from "../firebase";
@@ -25,6 +25,8 @@ function MainPosts() {
   return (
     <>
       {posts.map((post, idx) => {
+        const img = new Image();
+        img.src = post.imgUrl;
         return (
           <>
             <MainInfo key={idx}>
@@ -40,7 +42,7 @@ function MainPosts() {
                     더 자세한 방문후기 보러가기
                   </ToDetailBtn>
                 </div>
-                <Img src={post.imgUrl} alt="" />
+                <Img src={post.imgUrl} alt="" $img={img} />
               </Div>
             </MainInfo>
           </>
@@ -104,6 +106,14 @@ const ToDetailBtn = styled.button`
 `;
 
 const Img = styled.img`
+  ${(props) => {
+    let img = props.$img;
+    if (img.width > img.height) {
+      return css`
+        width: 400px;
+      `;
+    }
+  }}
   height: 300px;
   object-fit: cover;
   border-radius: 15px;

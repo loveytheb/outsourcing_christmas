@@ -3,16 +3,22 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Posts from "../Components/Posts";
 import treeImg from "../assets/treeIcon.png";
-
+import TipModal from "../Components/common/TipModal";
+import { showCustomModal } from "../redux/modules/customModalSlice";
+import { setModalOpen, setModalType } from "../redux/modules/modalState";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { __isLogin } from "../redux/modules/authSlice";
 
 function Detail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [mainPost, setMainPost] = useState(null);
-  const userName = useSelector((state) => state.authSlice.userId);
+  const userInfo = useSelector((state) => state.authSlice);
+  const userName = userInfo.userId;
+  const isLogined = userInfo.isLogined;
   console.log(useSelector((state) => state.authSlice));
 
   useEffect(() => {
@@ -25,8 +31,21 @@ function Detail() {
   }, [id]);
 
   console.log(mainPost);
+  const isOpen = useSelector((state) => state.customModalSlice.isOpen);
 
   if (!mainPost) return <div>Loading...</div>;
+
+  const handleAddPostBtn = () => {
+    if (!isLogined) {
+      alert("로그인이 필요합니다. 로그인부터 해주세요.");
+      dispatch(setModalOpen(true));
+      dispatch(setModalType("login"));
+      dispatch(showCustomModal(false));
+      navigate("/");
+    } else {
+      dispatch(showCustomModal(true));
+    }
+  };
 
   return (
     <>
@@ -41,7 +60,7 @@ function Detail() {
             <PlaceInfo>📅 {mainPost.opDate}</PlaceInfo>
             <PlaceInfo>🕒 {mainPost.opHour}</PlaceInfo>
             <PlaceTips>" {mainPost.tips} "</PlaceTips>
-            <AddPostBtn>
+            <AddPostBtn onClick={handleAddPostBtn}>
               {userName
                 ? `${userName}님의 방문 후기를 추가해보세요!`
                 : "로그인 후 방문 후기를 추가해보세요!"}
