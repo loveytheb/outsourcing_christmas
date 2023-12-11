@@ -5,8 +5,13 @@ import Header from "../Components/Header";
 import MainPosts from "../Components/MainPosts";
 import treeImg from "../assets/treeIcon.png";
 
+import AddButton from "../Components/common/AddButton";
+import CustomModal from "../Components/common/CustomModal";
+import { useSelector } from "react-redux";
+
 function Main() {
   const navigate = useNavigate();
+  const isOpen = useSelector((state) => state.customModalSlice.isOpen);
 
   return (
     <>
@@ -17,6 +22,9 @@ function Main() {
           <SearchButton>검색</SearchButton>
         </SearchBox>
         <Tmp>지도 영역</Tmp>
+        <AddButtonContainer>
+          <AddButton />
+        </AddButtonContainer>
       </MapBox>
 
       <ReadingBox>
@@ -30,9 +38,9 @@ function Main() {
           />
         </ReadingPost>
       </ReadingBox>
+      {isOpen && <CustomModal />}
     </>
   );
-
 }
 
 export default Main;
@@ -51,6 +59,12 @@ const MapBox = styled.div`
   display: flex;
   justify-content: center;
   /* align-items: center; */
+`;
+
+const AddButtonContainer = styled.div`
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
 `;
 
 const SearchBox = styled.div`
