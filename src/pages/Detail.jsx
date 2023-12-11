@@ -84,6 +84,7 @@ function Detail() {
           />
         </Container>
       </Div>
+      {isOpen && <TipModal id={id} />}
     </>
   );
 }
