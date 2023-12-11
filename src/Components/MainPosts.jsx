@@ -106,14 +106,15 @@ const ToDetailBtn = styled.button`
 `;
 
 const Img = styled.img`
-  ${(props) => {
+  /* ${(props) => {
     let img = props.$img;
     if (img.width > img.height) {
       return css`
         width: 400px;
       `;
     }
-  }}
+  }} */
+  width: 400px;
   height: 300px;
   object-fit: cover;
   border-radius: 15px;

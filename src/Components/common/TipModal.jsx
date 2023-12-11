@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { showCustomModal } from "../../redux/modules/customModalSlice";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, storage } from "../../firebase";
+import { arrayUnion, db, storage } from "../../firebase";
 
-function TipModal() {
+function TipModal(props) {
   const dispatch = useDispatch();
 
   const [imageFile, setImageFile] = useState(null);
@@ -44,13 +44,15 @@ function TipModal() {
       await uploadBytes(storageRef, imageFile);
 
       const imageUrl = await getDownloadURL(storageRef);
-      const placesCollectionRef = collection(db, "places");
+      // const placesCollectionRef = collection(db, "places");
+      const docRef = doc(db, "places", props.id);
       const newPost = {
         imgUrl: imageUrl,
-        opDate: formData.tips,
+        tips: formData.tips,
       };
+      await updateDoc(docRef, { posts: arrayUnion(newPost) });
 
-      await addDoc(placesCollectionRef, newPost);
+      //   await addDoc(placesCollectionRef, newPost);
       showCustomModal(false);
     } catch (error) {
       console.error("에러", error);

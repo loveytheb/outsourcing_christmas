@@ -44,6 +44,7 @@ const Content = styled.div`
 `;
 
 const Img = styled.img`
+  width: 400px;
   height: 300px;
   object-fit: cover;
   border-radius: 15px;
