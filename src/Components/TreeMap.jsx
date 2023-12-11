@@ -1,17 +1,32 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { useState } from "react";
 import { Map, MapMarker, useMap, CustomOverlayMap } from "react-kakao-maps-sdk";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { getAddress } from "../redux/modules/addrSlice";
+const { kakao } = window;
 
 function TreeMap() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [position, setPosition] = useState();
   const toDetailBtn = (id) => {
     navigate(`detail/${id}`);
+  };
+  const geocoder = new kakao.maps.services.Geocoder();
+
+  let callback = function (result, status) {
+    if (status === kakao.maps.services.Status.OK) {
+      const arr = { ...result };
+      const address = arr[0].road_address.address_name;
+      dispatch(getAddress(address));
+      console.log(address);
+    }
   };
   const data = [
     {
       content: (
-        <div style={{ padding: "5px", color: "#000" }}>
+        <div>
           신세계 백화점 본점 <br />
           <button onClick={() => toDetailBtn("68sGNEWUSKJzYsaTKMFU")}>
             더 자세히 알아보기
@@ -23,7 +38,7 @@ function TreeMap() {
     },
     {
       content: (
-        <div style={{ padding: "5px", color: "#000" }}>
+        <div>
           신세계 백화점 본점 <br />
           <button onClick={() => toDetailBtn("MPxGdJy2FJs8aO8W0Qqf")}>
             더 자세히 알아보기
@@ -56,13 +71,6 @@ function TreeMap() {
     );
   };
 
-  const [isOpen, setIsOpen] = useState(false);
-
-  const markerPosition = {
-    lat: 33.450701,
-    lng: 126.570667,
-  };
-
   return (
     <Map // 지도를 표시할 Container
       center={{
@@ -75,6 +83,16 @@ function TreeMap() {
         height: "450px",
       }}
       level={7} // 지도의 확대 레벨
+      onClick={(_t, mouseEvent) => {
+        const lat = mouseEvent.latLng.getLat();
+        const lng = mouseEvent.latLng.getLng();
+        setPosition({
+          lat,
+          lng,
+        });
+        // const coord = new kakao.maps.LatLng(position.lat, position.lng);
+        geocoder.coord2Address(lng, lat, callback);
+      }}
     >
       {places.map((value) => (
         <EventMarkerContainer
@@ -83,6 +101,8 @@ function TreeMap() {
           content={value.content}
         />
       ))}
+
+      {position && <MapMarker position={position} />}
     </Map>
   );
 }

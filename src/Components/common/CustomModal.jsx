@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { showCustomModal } from "../../redux/modules/customModalSlice";
 import { addDoc, collection } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -93,11 +93,11 @@ function CustomModal() {
         />
         <CustomModalInput
           type="text"
-          value={formData.placeAddr}
+          value={(formData.placeAddr = useSelector((state) => state.addrSlice))}
           onChange={handleChange}
           name="placeAddr"
           required
-          placeholder="핫스팟의 위치를 알려주세요!"
+          placeholder=""
         />
         <CustomModalInput
           type="text"
