@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { showCustomModal } from "../../redux/modules/customModalSlice";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -8,6 +8,7 @@ import { arrayUnion, db, storage } from "../../firebase";
 
 function TipModal(props) {
   const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.authSlice);
 
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -49,6 +50,7 @@ function TipModal(props) {
       const newPost = {
         imgUrl: imageUrl,
         tips: formData.tips,
+        userId: userInfo.userId,
       };
       await updateDoc(docRef, { posts: arrayUnion(newPost) });
 
