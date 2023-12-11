@@ -8,6 +8,7 @@ import treeImg from "../assets/treeIcon.png";
 import AddButton from "../Components/common/AddButton";
 import CustomModal from "../Components/common/CustomModal";
 import { useSelector } from "react-redux";
+import TreeMap from "../Components/TreeMap";
 
 function Main() {
   const navigate = useNavigate();
@@ -17,11 +18,13 @@ function Main() {
     <>
       <Header />
       <MapBox>
+        <TreeMap />
+
         <SearchBox>
           <SearchInput type="text" placeholder="장소 검색" />
           <SearchButton>검색</SearchButton>
         </SearchBox>
-        <Tmp>지도 영역</Tmp>
+
         <AddButtonContainer>
           <AddButton />
         </AddButtonContainer>
@@ -48,10 +51,6 @@ export default Main;
 const Tmp = styled.div`
   width: 100%;
   height: 600px;
-
-  background-color: black;
-  color: white;
-  font-size: 50px;
 `;
 
 const MapBox = styled.div`
@@ -65,11 +64,13 @@ const AddButtonContainer = styled.div`
   position: absolute;
   bottom: 20px;
   right: 20px;
+  z-index: 500;
 `;
 
 const SearchBox = styled.div`
   position: absolute;
   top: 30px;
+  z-index: 500;
 `;
 
 const SearchInput = styled.input`
