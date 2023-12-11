@@ -13,6 +13,7 @@ function Detail() {
   const navigate = useNavigate();
   const [mainPost, setMainPost] = useState(null);
   const userName = useSelector((state) => state.authSlice.userId);
+  console.log(useSelector((state) => state.authSlice));
 
   useEffect(() => {
     const fetchPost = async () => {

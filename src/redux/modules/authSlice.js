@@ -10,8 +10,8 @@ export const __isLogin = createAsyncThunk(
 );
 
 const initialState = {
-  isLogined: false,
-  userId: "",
+  isLogined: sessionStorage.length === 0 ? false : true,
+  userId: sessionStorage.length === 0 ? "" : sessionStorage.getItem("userId"),
 };
 
 const usersSlice = createSlice({

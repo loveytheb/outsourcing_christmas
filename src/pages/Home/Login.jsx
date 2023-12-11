@@ -4,6 +4,8 @@ import {
   onAuthStateChanged,
   getAuth,
   signInWithEmailAndPassword,
+  setPersistence,
+  browserSessionPersistence,
 } from "firebase/auth";
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { useDispatch } from "react-redux";
@@ -26,6 +28,7 @@ export default function Login({
     const docSnap = await getDoc(docRef);
     const name = docSnap.data().name;
     dispatch(__isLogin({ isLogined: true, userId: name }));
+    sessionStorage.setItem("userId", name);
   };
 
   useEffect(() => {
@@ -58,6 +61,7 @@ export default function Login({
 
   const logIn = async (event) => {
     event.preventDefault();
+    setPersistence(auth, browserSessionPersistence);
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
